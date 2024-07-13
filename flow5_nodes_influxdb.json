@@ -1,0 +1,401 @@
+[
+    {
+        "id": "e05fd9bc4c96e65b",
+        "type": "debug",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 930,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "c864968c3a9e5633",
+        "type": "influxdb in",
+        "z": "5c0f1638ad5d5db9",
+        "influxdb": "eeb221fb.ab27f",
+        "name": "",
+        "query": "SELECT time,temp FROM test where device = 'HTWIoT/temp/849' and time > now()-2m\n",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "my-org",
+        "x": 590,
+        "y": 380,
+        "wires": [
+            [
+                "02326552c693cdc1"
+            ]
+        ]
+    },
+    {
+        "id": "07fd27ec27688aef",
+        "type": "inject",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 300,
+        "y": 380,
+        "wires": [
+            [
+                "c864968c3a9e5633"
+            ]
+        ]
+    },
+    {
+        "id": "8fbe0b4beb0c91b5",
+        "type": "influxdb out",
+        "z": "5c0f1638ad5d5db9",
+        "influxdb": "eeb221fb.ab27f",
+        "name": "",
+        "measurement": "test",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "",
+        "retentionPolicyV18Flux": "",
+        "org": "",
+        "bucket": "",
+        "x": 910,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "c7c5912a14fba1b3",
+        "type": "function",
+        "z": "5c0f1638ad5d5db9",
+        "name": "single value",
+        "func": "msg.payload = Math.random()*10;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 520,
+        "wires": [
+            [
+                "8fbe0b4beb0c91b5"
+            ]
+        ]
+    },
+    {
+        "id": "12a864585358b5c8",
+        "type": "inject",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 520,
+        "wires": [
+            [
+                "c7c5912a14fba1b3"
+            ]
+        ]
+    },
+    {
+        "id": "e7435e11c2f45632",
+        "type": "link in",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "links": [
+            "d84efa8ae52848a5"
+        ],
+        "x": 335,
+        "y": 640,
+        "wires": [
+            [
+                "51506cd0e478dc13"
+            ]
+        ]
+    },
+    {
+        "id": "701cb78ba841e08a",
+        "type": "debug",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "51506cd0e478dc13",
+        "type": "function",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "func": "msg.payload={\n    device: msg.topic,\n    temp: msg.payload\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 600,
+        "wires": [
+            [
+                "b07981870539fcbc",
+                "8fbe0b4beb0c91b5"
+            ]
+        ]
+    },
+    {
+        "id": "b07981870539fcbc",
+        "type": "debug",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "a319c0acb2fce32a",
+        "type": "function",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "func": "msg.payload={\n    device: msg.topic,\n    humi: msg.payload\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 720,
+        "wires": [
+            [
+                "701cb78ba841e08a",
+                "8fbe0b4beb0c91b5"
+            ]
+        ]
+    },
+    {
+        "id": "1a2d04e77a31a5fd",
+        "type": "link in",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "links": [
+            "7bc15607c9a81470"
+        ],
+        "x": 345,
+        "y": 740,
+        "wires": [
+            [
+                "a319c0acb2fce32a"
+            ]
+        ]
+    },
+    {
+        "id": "c47231132d9527dd",
+        "type": "ui_chart",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "group": "1d604b3a8a4ab762",
+        "order": 9,
+        "width": 0,
+        "height": 0,
+        "label": "Database Data",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1180,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "02326552c693cdc1",
+        "type": "function",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "func": "var series = [\"temp DegC\"];\nvar labels = [\"Data Values\"];\nvar data = \"[[\";\nvar thetime;\n\nfor (var i=0; i < msg.payload.length; i++) {\n    thetime = Number(msg.payload[i].time); // Some manipulation of the time may be required\n    data += '{ \"x\":' + thetime + ', \"y\":' + msg.payload[i].temp + '}';\n    if (i < (msg.payload.length - 1)) {\n        data += \",\"\n        \n    } else {\n        data += \"]]\"\n        \n    }\n}\nvar jsondata = JSON.parse(data);\nmsg.payload = [{\"series\": series, \"data\": jsondata, \"labels\": labels}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 440,
+        "wires": [
+            [
+                "c47231132d9527dd",
+                "e05fd9bc4c96e65b"
+            ]
+        ]
+    },
+    {
+        "id": "bdb773e1fbbdb3c4",
+        "type": "function",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "func": "msg.query=\"SELECT time,temp FROM test where device = 'HTWIoT/temp/849' and time > now()-\"+msg.payload\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 320,
+        "wires": [
+            [
+                "c864968c3a9e5633",
+                "e05fd9bc4c96e65b"
+            ]
+        ]
+    },
+    {
+        "id": "f3260e220e7f040b",
+        "type": "ui_dropdown",
+        "z": "5c0f1638ad5d5db9",
+        "name": "",
+        "label": "",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "1d604b3a8a4ab762",
+        "order": 10,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "2 minutes",
+                "value": "2m",
+                "type": "str"
+            },
+            {
+                "label": "10minutes",
+                "value": "10m",
+                "type": "str"
+            },
+            {
+                "label": "1 hour",
+                "value": "1h",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 160,
+        "y": 300,
+        "wires": [
+            [
+                "bdb773e1fbbdb3c4"
+            ]
+        ]
+    },
+    {
+        "id": "eeb221fb.ab27f",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "IOT849_LAB",
+        "name": "",
+        "usetls": false,
+        "tls": "d50d0c9f.31e858",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "1d604b3a8a4ab762",
+        "type": "ui_group",
+        "name": "sharanya",
+        "tab": "2c7e8333974563b7",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d50d0c9f.31e858",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false
+    },
+    {
+        "id": "2c7e8333974563b7",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
